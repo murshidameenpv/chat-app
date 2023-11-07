@@ -4,8 +4,8 @@ import WorkArea from './WorkArea'
 
 export default function MainContainer() {
   return (
-      <div className='bg-blue-400 h-90vh w-90vw flex rounded-2xl'>
-          <Sidebar />
+      <div className='bg-blue-200 h-90vh w-90vw flex rounded-3xl'>
+          <Sidebar/>
           <WorkArea/>
       </div>
   )

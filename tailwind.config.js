@@ -11,10 +11,11 @@ module.exports = {
       width: {
         '90vw': '90vw',
       },
-      flexGrow: {
-        '3': '3',
-        '7': '7',
-      }
+      flex: {
+        '3': '0.3',
+        '7': '0.7',
+      },
+
     },
   },
   plugins: [],
