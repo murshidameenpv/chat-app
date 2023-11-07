@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -11,9 +11,14 @@ import ConversationItem from './ConversationItem';
 
 
 export default function Sidebar() {
+    const [consversations, setConsversations] = useState([{ name: "jack", lastMessage: "hello", timeStamp: "yesterday", },
+        { name: "james", lastMessage: "where?", timeStamp: "today", },
+    { name: "Amon", lastMessage: "ok", timeStamp: "today", },])
+console.log(setConsversations);
+
   return (
       <div className='border flex flex-col flex-3'>
-          <div className='p-3 m-4 rounded-2xl bg-slate-50 flex justify-between'>
+          <div className='p-1 m-4 rounded-2xl bg-slate-50 flex justify-between'>
               <div>
               <IconButton>
               <AccountCircleIcon/>
@@ -44,7 +49,9 @@ export default function Sidebar() {
          
           </div>
           <div className='p-3 m-4 rounded-2xl bg-white flex-1 '>
-              <ConversationItem/>
+              {consversations.map((Conversation) => {
+                  return <ConversationItem props={Conversation} key={Conversation.name}/>
+              })}
           </div>
       </div>
   )
