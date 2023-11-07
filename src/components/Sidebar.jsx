@@ -18,7 +18,7 @@ console.log(setConsversations);
 
   return (
       <div className='border flex flex-col flex-3'>
-          <div className='p-1 m-4 rounded-2xl bg-slate-50 flex justify-between'>
+          <div className='p-1 m-4 rounded-2xl bg-slate-50 flex justify-between shadow-lg'>
               <div>
               <IconButton>
               <AccountCircleIcon/>
@@ -41,14 +41,14 @@ console.log(setConsversations);
               
           </div>
          
-          <div className='p-3 mx-4 rounded-2xl bg-white flex items-center'>
+          <div className='p-3 mx-4 rounded-2xl bg-white flex items-center shadow-lg'>
               <IconButton>
                 <SearchIcon/>
               </IconButton>
              <input type="text" placeholder='Search' className='outline-none border-none text-lg ml-3'/>
          
           </div>
-          <div className='p-3 m-4 rounded-2xl bg-white flex-1 '>
+          <div className='p-3 m-4 rounded-2xl bg-white flex-1 shadow-lg'>
               {consversations.map((Conversation) => {
                   return <ConversationItem props={Conversation} key={Conversation.name}/>
               })}

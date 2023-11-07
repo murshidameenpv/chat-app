@@ -9,7 +9,7 @@ function MessageOthers() {
           </div>
           <div className='flex flex-col'>
               <p className='font-bold'>{props.name}</p>
-              <div className='bg-gray-200 rounded-tr-none rounded-lg px-2 py-1 max-w-xs'>
+              <div className='bg-gray-200 rounded-tr-none rounded-2xl px-2 py-1 max-w-xs'>
                   <p>{props.message}</p>
               </div>
               <p className='text-right text-xs text-gray-500'>{props.timeStamp}</p>

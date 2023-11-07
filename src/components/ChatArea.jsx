@@ -8,7 +8,7 @@ import MessageSelf from './MessageSelf';
 function ChatArea() {
   return (
       <div className='border flex flex-col flex-7'>
-          <div className='p-1 m-3 rounded-2xl bg-slate-50 flex justify-between items-center'>
+          <div className='p-1 m-3 rounded-2xl bg-slate-50 flex justify-between items-center shadow-lg'>
               <div className='flex items-center mx-2'>
                   <div className='bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center'>
                       <p>T</p>
@@ -26,7 +26,7 @@ function ChatArea() {
          </div>
         
         
-          <div className='flex-1 overflow-y-auto'>
+          <div className='flex-1 overflow-y-auto no-scrollbar'>
               <MessageOthers />
               <MessageSelf/>
               <MessageOthers />
@@ -37,7 +37,7 @@ function ChatArea() {
               <MessageSelf/>
           </div>
          
-          <div className='p-1 m-3 rounded-xl bg-white flex justify-between'>
+          <div className='p-1 m-3 rounded-xl bg-white flex justify-between shadow-lg'>
               <div className='flex items-center mx-2 w-full'>
                  <input type="text" placeholder='Type here...' className='border-none outline-none text-lg flex-grow m-3'/>
                  <IconButton>
