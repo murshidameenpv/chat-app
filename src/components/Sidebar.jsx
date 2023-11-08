@@ -7,6 +7,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton } from '@mui/material';
 import ConversationItem from './ConversationItem';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -14,7 +15,9 @@ export default function Sidebar() {
     const [consversations, setConsversations] = useState([{ name: "jack", lastMessage: "hello", timeStamp: "yesterday", },
         { name: "james", lastMessage: "where?", timeStamp: "today", },
     { name: "Amon", lastMessage: "ok", timeStamp: "today", },])
-console.log(setConsversations);
+    console.log(setConsversations);
+    
+    const navigate = useNavigate()
 
   return (
       <div className='border flex flex-col flex-3'>
@@ -24,15 +27,16 @@ console.log(setConsversations);
               <AccountCircleIcon/>
               </IconButton>   
               </div>
+              
               <div>
-              <IconButton>
+              <IconButton onClick={()=>{navigate('users')}}>
               <PersonAddIcon/>
               </IconButton>
               <IconButton>
-              <GroupAddIcon/>
+              <GroupAddIcon onClick={()=>{navigate('groups')}}/>
               </IconButton>
               <IconButton>
-              <AddCircleIcon/>
+              <AddCircleIcon onClick={()=>{navigate('create-group')}}/>
               </IconButton>
               <IconButton>
               <DarkModeIcon/>
