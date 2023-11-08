@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: "class", // This enables dark mode
   theme: {
     extend: {
       height: {
@@ -18,7 +19,12 @@ module.exports = {
       fontFamily: {
         'sans': ['Roboto', 'sans-serif'],
       }
-
+    },
+  },
+  variants: {
+    extend: {
+      backgroundColor: ['dark'], // This enables dark mode variants for background color
+      textColor: ['dark'], // This enables dark mode variants for text color
     },
   },
   plugins: [],

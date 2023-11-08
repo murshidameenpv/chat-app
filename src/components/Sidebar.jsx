@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useContext} from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -8,6 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { IconButton } from '@mui/material';
 import ConversationItem from './ConversationItem';
 import { useNavigate } from 'react-router-dom';
+import { DarkModeContext } from './DarkModeContext';
 
 
 
@@ -15,13 +16,12 @@ export default function Sidebar() {
     const [consversations, setConsversations] = useState([{ name: "jack", lastMessage: "hello", timeStamp: "yesterday", },
         { name: "james", lastMessage: "where?", timeStamp: "today", },
     { name: "Amon", lastMessage: "ok", timeStamp: "today", },])
-    console.log(setConsversations);
-    
     const navigate = useNavigate()
+    const { darkMode, setDarkMode } = useContext(DarkModeContext);
 
   return (
-      <div className='border flex flex-col flex-3'>
-          <div className='p-1 m-4 rounded-2xl bg-slate-50 flex justify-between shadow-lg'>
+      <div className={`border flex flex-col flex-3 ${darkMode ? 'dark' : ''}`}>
+          <div className='p-1 m-4 rounded-2xl bg-slate-50 dark:bg-slate-500 flex justify-between shadow-lg'>
               <div>
               <IconButton>
               <AccountCircleIcon/>
@@ -38,21 +38,22 @@ export default function Sidebar() {
               <IconButton>
               <AddCircleIcon onClick={()=>{navigate('create-group')}}/>
               </IconButton>
-              <IconButton>
-              <DarkModeIcon/>
+                  <IconButton>
+{/* when called, will call setDarkMode with the opposite of the current darkMode value */}
+              <DarkModeIcon onClick={() => setDarkMode(!darkMode)}/>
               </IconButton>   
               </div>
               
           </div>
          
-          <div className='p-3 mx-4 rounded-2xl bg-white flex items-center shadow-lg'>
+          <div className='p-3 mx-4 rounded-2xl bg-white dark:bg-slate-500 flex items-center shadow-lg'>
               <IconButton>
                 <SearchIcon/>
               </IconButton>
-             <input type="text" placeholder='Search' className='outline-none border-none text-lg ml-3'/>
+             <input type="text" placeholder='Search' className='outline-none border-none text-lg ml-3 dark:bg-slate-500'/>
          
           </div>
-          <div className='p-3 m-4 rounded-2xl bg-white flex-1 shadow-lg'>
+          <div className='p-3 m-4 rounded-2xl bg-white dark:bg-slate-500 flex-1 shadow-lg'>
               {consversations.map((Conversation) => {
                   return <ConversationItem props={Conversation} key={Conversation.name}/>
               })}
