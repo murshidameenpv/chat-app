@@ -4,6 +4,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton } from '@mui/material';
 import ConversationItem from './ConversationItem';
@@ -40,7 +41,8 @@ export default function Sidebar() {
               </IconButton>
                   <IconButton>
 {/* when called, will call setDarkMode with the opposite of the current darkMode value */}
-              <DarkModeIcon onClick={() => setDarkMode(!darkMode)}/>
+                      {darkMode ? <WbSunnyIcon onClick={() => { setDarkMode(!darkMode) }} /> :
+                      <DarkModeIcon onClick={() => { setDarkMode(!darkMode) }} />}
               </IconButton>   
               </div>
               
@@ -48,7 +50,7 @@ export default function Sidebar() {
          
           <div className='p-3 mx-4 rounded-2xl bg-white dark:bg-slate-500 flex items-center shadow-lg'>
               <IconButton>
-                <SearchIcon/>
+                 <SearchIcon/>
               </IconButton>
              <input type="text" placeholder='Search' className='outline-none border-none text-lg ml-3 dark:bg-slate-500'/>
          
