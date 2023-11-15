@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import logo from '../images/live-chat.png'
 import { IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
