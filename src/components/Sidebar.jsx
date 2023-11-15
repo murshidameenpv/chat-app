@@ -9,7 +9,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { IconButton } from '@mui/material';
 import ConversationItem from './ConversationItem';
 import { useNavigate } from 'react-router-dom';
-import { DarkModeContext } from './DarkModeContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme } from '../redux/themeSlice';
 
 
 
@@ -17,11 +18,13 @@ export default function Sidebar() {
     const [consversations, setConsversations] = useState([{ name: "jack", lastMessage: "hello", timeStamp: "yesterday", },
         { name: "james", lastMessage: "where?", timeStamp: "today", },
     { name: "Amon", lastMessage: "ok", timeStamp: "today", },])
+    const currentTheme = useSelector((state) => state.themeKey);
     const navigate = useNavigate()
-    const { darkMode, setDarkMode } = useContext(DarkModeContext);
+    const dispatch = useDispatch()
+
 
   return (
-      <div className={`border flex flex-col flex-3 ${darkMode ? 'dark' : ''}`}>
+      <div className={`border flex flex-col flex-3 ${currentTheme ? 'dark' : ''}`}>
           <div className='p-1 m-4 rounded-2xl bg-slate-50 dark:bg-slate-500 flex justify-between shadow-lg'>
               <div>
               <IconButton>
@@ -39,10 +42,10 @@ export default function Sidebar() {
               <IconButton>
               <AddCircleIcon onClick={()=>{navigate('create-group')}}/>
               </IconButton>
-                  <IconButton>
+                  <IconButton onClick={()=>dispatch(toggleTheme())}>
 {/* when called, will call setDarkMode with the opposite of the current darkMode value */}
-                      {darkMode ? <WbSunnyIcon onClick={() => { setDarkMode(!darkMode) }} /> :
-                      <DarkModeIcon onClick={() => { setDarkMode(!darkMode) }} />}
+                      {currentTheme && <WbSunnyIcon/>}
+                      {!currentTheme && <DarkModeIcon/>}
               </IconButton>   
               </div>
               

@@ -1,13 +1,11 @@
-import React, { useContext } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { DarkModeContext } from './DarkModeContext';
 
 function ConversationItem({ props }) {
   const navigate = useNavigate()
-  const { darkMode } = useContext(DarkModeContext);
-
+  const currentTheme = useSelector((state)=>state.themeKey)
   return (
-    <div className={`flex items-center space-x-4 p-3 bg-slate-50 my-2 rounded-xl cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 select-none ${darkMode ? 'dark' : ''}`} onClick={()=>{navigate('chat')}} >
+    <div className={`flex items-center space-x-4 p-3 bg-slate-50 my-2 rounded-xl cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 select-none ${currentTheme ? 'dark' : ''}`} onClick={()=>{navigate('chat')}} >
       <div className='bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center'>
         <p>{props.name[0].toUpperCase()}</p>
       </div>

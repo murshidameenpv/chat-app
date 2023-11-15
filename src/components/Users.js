@@ -2,12 +2,12 @@ import React, { useContext } from 'react'
 import logo from '../images/live-chat.png'
 import { IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
-import { DarkModeContext } from './DarkModeContext';
+import { useSelector } from 'react-redux';
 
 function UsersAndGroups() {
-    const {darkMode,setDarkMode} = useContext(DarkModeContext)
+ const currentTheme = useSelector((state) => state.themeKey);
   return (
-      <div className={`border flex flex-col flex-7 ${darkMode ? 'dark' : ''}`}>
+      <div className={`border flex flex-col flex-7 ${currentTheme ? 'dark' : ''}`}>
           <div className='p-2 mt-3 mx-3 rounded-2xl bg-slate-50  dark:bg-slate-500 flex items-center shadow-lg  text-center'>
               <img src={logo} alt="Logo" className='w-10 h-10'/>
               <p className='text-lg font-bold ml-2 pl-2'>Online Users</p>
