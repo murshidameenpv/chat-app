@@ -11,7 +11,7 @@ import ConversationItem from './ConversationItem';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/themeSlice';
-
+import { motion,AnimatePresence} from "framer-motion"
 
 
 export default function Sidebar() {
