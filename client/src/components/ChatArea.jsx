@@ -2,7 +2,7 @@ import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton } from '@mui/material';
-import MessageOthers from '../MessageOthers';
+import MessageOthers from './MessageOthers';
 import MessageSelf from './MessageSelf';
 import {motion,AnimatePresence} from 'framer-motion'
 function ChatArea() {
