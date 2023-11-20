@@ -13,5 +13,4 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const userDb = mongoose.model('User', userSchema);
-export default userDb
-    ;
+export default userDb;
