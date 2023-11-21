@@ -1,5 +1,6 @@
   import MainContainer from "./components/MainContainer";
   import LoginContainer from "./components/LoginContainer";
+  import SignupContainer from "./components/SignupContainer"
   import {Routes,Route} from 'react-router-dom';
   import Welcome from "./components/Welcome";
   import ChatArea from "./components/ChatArea";
@@ -14,6 +15,7 @@
       <div className="bg-slate-200 min-h-screen justify-center items-center flex font-sans">
         <Routes>
           <Route path="/" element={ <LoginContainer/>} />
+          <Route path="/signup" element={ <SignupContainer/>} />
           <Route path="app" element={<MainContainer/>}>
             <Route path="welcome" element={<Welcome/>}></Route>
             <Route path="chat" element={<ChatArea/>}></Route>
