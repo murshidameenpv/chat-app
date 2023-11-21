@@ -1,7 +1,7 @@
 import logo from '../images/live-chat.png'
 import { IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
-import { motion,AnimatePresence, anticipate} from "framer-motion"
+import { motion,AnimatePresence,} from "framer-motion"
 function Groups() {
     return (
       <AnimatePresence>

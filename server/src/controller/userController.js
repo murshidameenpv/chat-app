@@ -7,7 +7,7 @@ dotenv.config()
 
  
 
-export const loginController = expressAsyncHandler(async (req, res) => {
+export const signInController = expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
     try {
        const validUser = await userDb.findOne({ email })
@@ -38,16 +38,8 @@ export const signUpController = expressAsyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
     const hashedPassword = bcryptjs.hashSync(password, 10);
     try {
-        if (!name || !email || !password) {
-            return res.status(401).json({ "message": "Fill all data" })
-        }
-        const existUser = await userDb.findOne({ email });
-        if (existUser) {
-            return res.status(401).json({ "message": "User already exists" })
-        }
         const newUser = new userDb({ name, password: hashedPassword, email });
         await newUser.save()
-
         // Exclude password when sending user data
         const userToSend = newUser.toObject();
         delete userToSend.password;
