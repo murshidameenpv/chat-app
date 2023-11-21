@@ -15,7 +15,6 @@
       <div className="bg-slate-200 min-h-screen justify-center items-center flex font-sans">
         <Routes>
           <Route path="/" element={ <LoginContainer/>} />
-          <Route path="/signup" element={ <SignupContainer/>} />
           <Route path="app" element={<MainContainer/>}>
             <Route path="welcome" element={<Welcome/>}></Route>
             <Route path="chat" element={<ChatArea/>}></Route>
