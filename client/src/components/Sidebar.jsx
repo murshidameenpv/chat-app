@@ -6,12 +6,13 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import SearchIcon from '@mui/icons-material/Search';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { IconButton } from '@mui/material';
 import ConversationItem from './ConversationItem';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/themeSlice';
-
+import { signOut } from '../redux/userSlice';
 
 export default function Sidebar() {
     const [consversations, setConsversations] = useState([{ name: "jack", lastMessage: "hello", timeStamp: "yesterday", },
@@ -35,17 +36,20 @@ export default function Sidebar() {
               <IconButton onClick={()=>{navigate('users')}}>
               <PersonAddIcon/>
               </IconButton>
-              <IconButton>
-              <GroupAddIcon onClick={()=>{navigate('groups')}}/>
+              <IconButton  onClick={()=>{navigate('groups')}}>
+              <GroupAddIcon/>
               </IconButton>
-              <IconButton>
-              <AddCircleIcon onClick={()=>{navigate('create-group')}}/>
+              <IconButton  onClick={()=>{navigate('create-group')}}>
+              <AddCircleIcon/>
               </IconButton>
                   <IconButton onClick={()=>dispatch(toggleTheme())}>
 {/* when called, will call setDarkMode with the opposite of the current darkMode value */}
                       {currentTheme && <WbSunnyIcon/>}
                       {!currentTheme && <DarkModeIcon/>}
-              </IconButton>   
+                  </IconButton>  
+                  <IconButton onClick={() => { dispatch(signOut()); navigate('/')}}>
+                      <ExitToAppIcon/>
+              </IconButton>    
               </div>
               
           </div>

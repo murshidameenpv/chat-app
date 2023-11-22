@@ -1,11 +1,25 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import logo from '../images/live-chat.png'
 import { IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import { useSelector } from 'react-redux';
-import {motion,AnimatePresence} from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
+
 function UsersAndGroups() {
- const currentTheme = useSelector((state) => state.themeKey);
+    const currentTheme = useSelector((state) => state.themeKey);
+   useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('/api/fetchusers');
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchUsers();
+}, []);
     return (
       <AnimatePresence>
              <motion.div initial={{ opacity: 0, scale: 0 }}

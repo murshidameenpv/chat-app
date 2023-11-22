@@ -11,7 +11,7 @@ export default function AuthContainer() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [data,setData] = useState({name:"",password:"",email:""})
-  const { loading, error } = useSelector((state) => state.userKey)
+  const {loading, error } = useSelector((state) => state.userKey)
   const handleSignInInput = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   }
@@ -22,7 +22,6 @@ export default function AuthContainer() {
   const handleSignUp = async () => {
     dispatch(signUpStart());
     try {
-      console.log(data);
       const response = await axios.post('/api/signup', data);
       dispatch(signUpSuccess(response.data));
       navigate('/app/welcome')
@@ -36,7 +35,6 @@ export default function AuthContainer() {
     dispatch(signInStart());
     try {
       const response = await axios.post('/api/signin', data);
-      console.log(data);
       dispatch(signInSuccess(response.data));
       navigate('/app/welcome')
     } catch (error) {
@@ -81,7 +79,7 @@ export default function AuthContainer() {
             <TextField id="outlined" label="Enter Email Address" variant="outlined" name="email" value={data.email} onChange={handleSignUpInput}/>
             <TextField id="outlined-password-input" label="Password" type="password" autoComplete="current-password" name="password" value={data.password} onChange={handleSignInInput}/>
             <Button variant="outlined" onClick={handleSignUp}>Sign Up</Button>
-              <p className='text-sm'>Already have an account? <span className='text-blue-700 cursor-pointer' onClick={() => { setIsLogin(false); dispatch(clearError()); }}>Login</span></p>
+              <p className='text-sm'>Already have an account? <span className='text-blue-700 cursor-pointer' onClick={() => { setIsLogin(true); dispatch(clearError()); }}>Login</span></p>
                         <div className='text-center'>
                 {error && <p className='text-red-500 animate-blink'>{error}</p>}
             </div>

@@ -45,5 +45,5 @@ const userSlicer = createSlice({
         },
     },
 });
-export const { signInFailure, signInStart, signInSuccess,signUpStart,signUpFailure,signUpSuccess,clearError} = userSlicer.actions;
+export const { signInFailure, signInStart, signInSuccess,signUpStart,signUpFailure,signUpSuccess,clearError,signOut} = userSlicer.actions;
 export default userSlicer.reducer;

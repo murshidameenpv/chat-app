@@ -53,3 +53,16 @@ export const signUpController = expressAsyncHandler(async (req, res) => {
         res.status(500).json({ "message": "An error occurred during registration" });
     }
 });
+
+
+
+
+export const fetchAllUsers = async (req, res) => {
+    console.log(req.user,"llllllllllllllllll");
+  try {
+    const users = await userDb.find({ _id: { $ne: req.user.id } });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred while fetching users' });
+  }
+};
