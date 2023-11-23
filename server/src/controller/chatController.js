@@ -1,5 +1,5 @@
 import userDb from "../models/userSchema.js";
-import chatDb from "../models/messageSchema.js";
+import chatDb from "../models/chatSchema.js";
 
 // CREATE ONE TO ONE CHAT  1
 export const accessChat = async (req, res) => {
@@ -118,3 +118,25 @@ export const groupExit = async (req, res) => {
     res.status(200).json(removed);
   }
 };
+
+//if you found a  group you can join yourself in that group 
+const addSelfToGroup = async (req, res) => {
+    const { chatId, userId } = req.body;
+    try {
+        const added = await chatDb.findByIdAndUpdate(chatId, {
+            $push: { users: userId }
+        }, { new: true })
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password")
+        
+        if (!added) {
+            res.status(400).send("Error Adding to group");    
+        }else{
+            res.status(200).json(added)
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal server error");
+
+    }
+}
