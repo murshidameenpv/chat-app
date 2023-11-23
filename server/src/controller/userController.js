@@ -58,10 +58,9 @@ export const signUpController = expressAsyncHandler(async (req, res) => {
 
 
 export const fetchAllUsers = async (req, res) => {
-    console.log(req.user,"llllllllllllllllll");
   try {
     const users = await userDb.find({ _id: { $ne: req.user.id } });
-    res.json(users);
+    res.status(202).json(users);
   } catch (error) {
     res.status(500).json({ message: 'An error occurred while fetching users' });
   }

@@ -120,7 +120,7 @@ export const groupExit = async (req, res) => {
 };
 
 //if you found a  group you can join yourself in that group 
-const addSelfToGroup = async (req, res) => {
+export const addSelfToGroup = async (req, res) => {
     const { chatId, userId } = req.body;
     try {
         const added = await chatDb.findByIdAndUpdate(chatId, {

@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
-import { sendMessage, allMessages } from '../controller/messageController';
-import { verifyUser } from '../utils/verifyUser';
+import { sendMessage, allMessages } from '../controller/messageController.js';
+import { verifyUser } from '../utils/verifyUser.js';
 
 
 router.get('/:chatId', verifyUser, allMessages);
