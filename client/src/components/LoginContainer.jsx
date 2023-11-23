@@ -22,7 +22,7 @@ export default function AuthContainer() {
   const handleSignUp = async () => {
     dispatch(signUpStart());
     try {
-      const response = await axios.post('/api/signup', data);
+      const response = await axios.post('/api/user/signup', data);
       dispatch(signUpSuccess(response.data));
       navigate('/app/welcome')
     } catch (error) {
@@ -34,7 +34,7 @@ export default function AuthContainer() {
   const handleSignIn = async () => {
     dispatch(signInStart());
     try {
-      const response = await axios.post('/api/signin', data);
+      const response = await axios.post('/api/user/signin', data);
       dispatch(signInSuccess(response.data));
       navigate('/app/welcome')
     } catch (error) {

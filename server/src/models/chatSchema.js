@@ -7,7 +7,7 @@ const chatSchema = new mongoose.Schema({
     },
     isGroupChat: {
         type: Boolean,
-        default: true,
+        default: false,
     },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
