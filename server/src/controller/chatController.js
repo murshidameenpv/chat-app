@@ -30,7 +30,7 @@ export const accessChat = async (req, res) => {
       };
 
       chat = await chatDb.create(chatData);
-      await chat.populate("users", "-password").execPopulate();  // Populate users after creation
+      await chat.populate("users", "-password")
     }
 
     res.status(200).json(chat);
@@ -40,24 +40,21 @@ export const accessChat = async (req, res) => {
   }
 };
 
-
-export const fetchChat =  (req, res) => {
-    try {
-        chatDb.find({ users: { $elemMatch: { $eq: req.user._id } } })
-            .populate("users", "-password")
-            .populate("groupAdmin", "-password")
-            .populate("lastMessage")
-            .sort({ updatedAt: -1 })
-            .then(async (results) => {
-                results = await userDb
-                    .populate(results, { path: "lastMessage.sender", select: "name email", });
-            });
-        res.status(200).json(results)
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Sever Error")
-    }
+export const fetchChat = async (req, res) => {
+  try {
+    let results = await chatDb.find({ users: { $elemMatch: { $eq: req.user.id } } })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .populate("lastMessage")
+      .sort({ updatedAt: -1 });
+    results = await userDb.populate(results, { path: "lastMessage.sender", select: "name email" });
+    res.status(200).json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
 
 export const fetchGroupChat = async (req, res) => {
     try {

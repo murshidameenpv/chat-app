@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -13,15 +13,25 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/themeSlice';
 import { signOut } from '../redux/userSlice';
+import axios from 'axios';
 
 export default function Sidebar() {
-    const [consversations, setConsversations] = useState([{ name: "jack", lastMessage: "hello", timeStamp: "yesterday", },
-        { name: "james", lastMessage: "where?", timeStamp: "today", },
-    { name: "Amon", lastMessage: "ok", timeStamp: "today", },])
+    const [conversations, setConversations] = useState([])
+    const refreshSideBar = useSelector((state) => state.sideBarKey);
     const currentTheme = useSelector((state) => state.themeKey);
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
+    useEffect(() => {
+        const fetchChats = async () => {
+            try {
+                const response = await axios.get('/api/chat/getChats')
+                setConversations(response.data)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchChats()
+    },[refreshSideBar])
 
   return (
       <div className={`border flex flex-col flex-3  rounded-tl-3xl rounded-bl-3xl ${currentTheme ? 'dark' : ''}`}>
@@ -61,9 +71,9 @@ export default function Sidebar() {
              <input type="text" placeholder='Search' className='outline-none border-none text-lg ml-3 dark:bg-slate-500'/>
          
           </div>
-          <div className='p-3 m-4 rounded-2xl bg-white dark:bg-slate-500 flex-1 shadow-lg'>
-              {consversations.map((Conversation) => {
-                  return <ConversationItem props={Conversation} key={Conversation.name}/>
+          <div className='p-3 m-4 rounded-2xl bg-white dark:bg-slate-500 flex-1 shadow-lg overflow-y-auto no-scrollbar'>
+              {conversations.map((conversation,index) => {
+                   return <ConversationItem conversation={conversation} key={index}/>
               })}
           </div>
       </div>

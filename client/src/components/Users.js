@@ -4,15 +4,17 @@ import logo from '../images/live-chat.png'
 import { IconButton,Backdrop, CircularProgress} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch} from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import { refreshSidebarFun } from '../redux/refreshSideBarSlice.js';
 
 function UsersAndGroups() {
   const currentTheme = useSelector((state) => state.themeKey);
   const { refresh, setRefresh } = useContext(RefreshContext);
   const [users, setUsers] = useState([]);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
 useEffect(() => {
   const fetchUsers = async () => {
@@ -30,15 +32,17 @@ useEffect(() => {
 }, [refresh]);
   
   const handleAccessChat = async (userId) => {
-      try {
-      setLoading(true);
-      const response = await axios.post('/api/chat/getChats',{userId});
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error(error);
-    }
-}
+  try {
+    setLoading(true);
+    await axios.post('/api/chat/getChats', { userId });
+    dispatch(refreshSidebarFun());
+    setLoading(false);
+  } catch (error) {
+    setLoading(false);
+    console.error(error);
+  }
+};
+
   return (
     <AnimatePresence>
       <motion.div initial={{ opacity: 0, scale: 0 }}

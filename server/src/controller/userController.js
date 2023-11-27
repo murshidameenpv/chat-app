@@ -22,7 +22,7 @@ export const signInController = expressAsyncHandler(async (req, res) => {
          // Exclude password when sending user data
         const userToSend = validUser.toObject();
         delete userToSend.password;
-        const expiryDate = new Date(Date.now()+3600000)
+        const expiryDate = new Date(Date.now()+36000000)
         res.cookie('access_token', token, { httpOnly: true, expires:expiryDate})
             .status(200)
             .json(userToSend)
@@ -44,7 +44,7 @@ export const signUpController = expressAsyncHandler(async (req, res) => {
         const userToSend = newUser.toObject();
         delete userToSend.password;
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET)
-        const expiryDate = new Date(Date.now() + 3600000)
+        const expiryDate = new Date(Date.now() + 36000000)
 
         res.cookie('access_token', token, { httpOnly: true, expires: expiryDate }).status(200).json(userToSend)
 
