@@ -14,8 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
-app.use('api/chat',chatRoutes)
-app.use('api/message',messageRoutes)
+app.use('/api/chat',chatRoutes)
+app.use('/api/message',messageRoutes)
 
 app.listen(port, () => {
     console.log(`Server listening on port http://localhost:${port}`);

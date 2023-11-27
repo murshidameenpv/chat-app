@@ -18,10 +18,7 @@ useEffect(() => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      // introduce a delay before fetching the users
-      await new Promise(resolve => setTimeout(resolve, 100));
       const response = await axios.get('/api/user/fetchusers');
-      console.log(response.data);
       setUsers(response.data);
       setLoading(false);
     } catch (error) {
@@ -31,7 +28,17 @@ useEffect(() => {
   };
   fetchUsers();
 }, [refresh]);
-
+  
+  const handleAccessChat = async (userId) => {
+      try {
+      setLoading(true);
+      const response = await axios.post('/api/chat/getChats',{userId});
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
+}
   return (
     <AnimatePresence>
       <motion.div initial={{ opacity: 0, scale: 0 }}
@@ -51,7 +58,7 @@ useEffect(() => {
         </div>
         <div className='p-3 m-4 rounded-2xl flex flex-col space-y-4 overflow-y-auto no-scrollbar'>
           {users.map((user, index) => (
-            <motion.div key={index} whileHover={{scale:1.02}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none'>
+            <motion.div key={index} whileHover={{scale:1.02}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none' onClick={() => handleAccessChat(user._id)}>
               <div className='bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center'>
                 <p>{user.name[0].toUpperCase()}</p>
               </div>

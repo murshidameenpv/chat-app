@@ -1,41 +1,45 @@
 import userDb from "../models/userSchema.js";
 import chatDb from "../models/chatSchema.js";
-
-// CREATE ONE TO ONE CHAT  1
+// CREATE ONE TO ONE CHAT
 export const accessChat = async (req, res) => {
-    const { userId } = req.body;
-    try {
-        if (!userId) {
-            console.error("User id param is not send with request");
-            return res.status(400);
-        }
-        let isChat = await chatDb.find({
-            isGroupChat: false, $and: [
-                { users: { $elemMatch: { $eq: req.user._id } } },
-                { users: { $elemMatch: { $eq: req.userId } } },
-            ],
-        })
-            .populate("users", "-password")
-            .populate("lastMessage");
-        isChat = await userDb.populate(isChat, { path: "lastMessage.sender", select: "name email", })
-        if (isChat.length > 0) {
-            res.status(200).json(isChat);
-        } else {
-            var chatData = {
-                chatName: "sender",
-                isGroupChat: false,
-                users:[req.user._id,userId]
-            }
-        }
-        const createdChat = await chatDb.create(chatData);
-        const fullChat = await chatDb.findOne({ _id: createdChat._id })
-            .populate("users", "-password");
-        res.status(200).json(fullChat)
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Sever Error")
+  const { userId } = req.body;
+
+  // Check if userId is provided
+  if (!userId) {
+    console.error("User id param is not send with request");
+    return res.status(400).json({ error: "User id param is not send with request" });
+  }
+
+  try {
+    // Use findOne instead of find to get a single document
+    let chat = await chatDb.findOne({
+      isGroupChat: false,
+      users: { $all: [req.user.id, userId] },  // Use $all to match all elements in the array
+    })
+    .populate([
+      { path: "users", select: "-password" },  // Use an array to populate multiple paths
+      { path: "lastMessage", populate: { path: "sender", select: "name email" } },  // Nested population
+    ]);
+
+    // If chat doesn't exist, create a new one
+    if (!chat) {
+      const chatData = {
+        chatName: "sender",
+        isGroupChat: false,
+        users: [req.user.id, userId],
+      };
+
+      chat = await chatDb.create(chatData);
+      await chat.populate("users", "-password").execPopulate();  // Populate users after creation
     }
+
+    res.status(200).json(chat);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
 
 export const fetchChat =  (req, res) => {
     try {
