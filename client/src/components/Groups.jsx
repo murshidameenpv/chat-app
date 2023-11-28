@@ -1,11 +1,18 @@
 import logo from '../images/live-chat.png'
-import { IconButton } from '@mui/material'
+import { IconButton,Alert,Stack  } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import { motion,AnimatePresence,} from "framer-motion"
 import { useEffect, useState } from 'react';
 import axios from 'axios'
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { refreshSidebarFun } from '../redux/refreshSideBarSlice.js';
+
 function Groups() {
-    const [groups,setGroups] = useState([])
+    const { currentUser } = useSelector((state) => state.userKey)
+    const [groups, setGroups] = useState([]);
+      const [alert, setAlert] = useState({ success: false, message: '' });
+    const dispatch = useDispatch()
     useEffect(() => {
         const fetchGroups = async () => {
             try {
@@ -17,7 +24,20 @@ function Groups() {
           }
         }
         fetchGroups();
-    },[])
+    }, [])
+const handleAddSelfToGroup = async (chatId) => {
+  try {
+   const response = await axios.put('/api/chat/addSelfToGroup', {
+      chatId: chatId,
+      userId: currentUser._id
+   });
+    setAlert({ success: response.data.success, message: response.data.message });
+      dispatch(refreshSidebarFun())
+  } catch (error) {
+    console.error(error);
+  }
+}
+
     return (
       <AnimatePresence>
             <motion.div initial={{ opacity: 0, scale: 0 }}
@@ -31,10 +51,15 @@ function Groups() {
                   <SearchIcon/>
               </IconButton>
               <input type="text" placeholder='Search' className='border-none outline-none text-lg flex-grow ml-3 dark:bg-slate-500'/>
-          </div>
-          <div className='p-3 m-4 rounded-2xl flex flex-col space-y-4 overflow-y-auto no-scrollbar'>
+                </div>
+            <Stack sx={{ width: '100%' }} spacing={2}>
+                      {alert.message && <Alert severity={alert.success ? "success" : "error"}>{alert.message}</Alert>}
+             </Stack>
+                <div className='p-3 m-4 rounded-2xl flex flex-col space-y-4 overflow-y-auto no-scrollbar'>
              {groups.map((group, index) => (
-            <motion.div key={index} whileHover={{scale:1.02}} whileTap={{scale:1}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none'>
+                 <motion.div key={index} whileHover={{ scale: 1.02 }} whileTap={{ scale: 1 }} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 cursor-pointer' onClick={() =>  {
+                     handleAddSelfToGroup(group._id)
+            }}>
               <div className='bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center'>
                 <p>{group.chatName[0].toUpperCase()}</p>
               </div>
@@ -42,10 +67,11 @@ function Groups() {
             </motion.div>
           ))}
           </div>
-      </motion.div>
-      </AnimatePresence>
+            </motion.div>
+        </AnimatePresence>
+        
       
   )
 }
 
-export default Groups
+export default Groups;

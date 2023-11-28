@@ -9,7 +9,7 @@ router.get("/getChats",verifyUser, fetchChat);
 router.post("/createGroup", verifyUser, createGroupChat);
 router.get("/fetchGroups", verifyUser, fetchGroupChat);
 router.put("/groupExit", verifyUser, groupExit);
-router.put("/addSelfToGroup   ", verifyUser, addSelfToGroup);
+router.put("/addSelfToGroup", verifyUser, addSelfToGroup);
 
 export default router;
 

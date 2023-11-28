@@ -93,6 +93,31 @@ export const createGroupChat = async (req, res) => {
   }
 };
 
+export const addSelfToGroup = async (req, res) => {
+    const { chatId, userId } = req.body;
+    try {
+        const chatGroup = await chatDb.findById(chatId);
+        if (!chatGroup) {
+            return res.status(200).json({success:false,message:"Group not found"});
+        }
+        if (chatGroup.users.includes(userId)) {
+            return res.status(200).json({success:false,message:"You have already joined this group"});
+        }
+        const added = await chatDb.findByIdAndUpdate(chatId, {
+            $push: { users: userId }
+        }, { new: true })
+              .populate("users", "-password")
+              .populate("groupAdmin", "-password")
+          
+          if (!added) {
+              return res.status(200).json({success:false,message:"Error joining the group"});    
+          }
+          return res.status(200).json({success:true,message:"Successfully joined the group"});
+      } catch (error) {
+          console.error(error);
+          return res.status(500).send("Internal server error");
+      }
+  }
 
 
 export const groupExit = async (req, res) => {
@@ -119,25 +144,3 @@ export const groupExit = async (req, res) => {
     res.status(200).json(removed);
   }
 };
-
-//if you found a  group you can join yourself in that group 
-export const addSelfToGroup = async (req, res) => {
-    const { chatId, userId } = req.body;
-    try {
-        const added = await chatDb.findByIdAndUpdate(chatId, {
-            $push: { users: userId }
-        }, { new: true })
-            .populate("users", "-password")
-            .populate("groupAdmin", "-password")
-        
-        if (!added) {
-            res.status(400).send("Error Adding to group");    
-        }else{
-            res.status(200).json(added)
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal server error");
-
-    }
-}
