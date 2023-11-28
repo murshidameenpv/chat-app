@@ -12,11 +12,11 @@ function ConversationItem({ conversation }) {
     const otherUser = conversation.users.find(user => user._id !== currentUser._id);
     chatName = otherUser.name;
   }
-
-  const lastMessage = conversation.lastMessage ? conversation.lastMessage : "No previous messages";
+  const lastMessage = conversation.lastMessage ? conversation.lastMessage.content : "No previous messages";
 
   return (
-    <div className={`flex items-center space-x-4 p-3 bg-slate-50 my-2 rounded-xl cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 select-none ${currentTheme ? 'dark' : ''}`} onClick={() => { navigate('chat') }} >
+    <div className={`flex items-center space-x-4 p-3 bg-slate-50 my-2 rounded-xl cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 select-none ${currentTheme ? 'dark' : ''}`}
+      onClick={() => { navigate("chat/"+ conversation._id + "&"+ chatName) }}>
       <div className='bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center'>
         <p>{chatName[0].toUpperCase()}</p>
       </div>

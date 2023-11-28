@@ -57,7 +57,8 @@ export const fetchChat = async (req, res) => {
 
 
 export const fetchGroupChat = async (req, res) => {
-    try {
+  try {
+      
         const allGroups = await chatDb.where("isGroupChat").equals(true);
         res.status(200).json(allGroups)
     } catch (error) {
@@ -68,21 +69,20 @@ export const fetchGroupChat = async (req, res) => {
 
 export const createGroupChat = async (req, res) => {
   if (!req.body.users || !req.body.name) {
-    return res.status(400).send({ message: "Data is insufficient" });
+    return res.status(400).json({ message: "Data is insufficient" });
   }
-
-  var users = JSON.parse(req.body.users);
-  users.push(req.user);
-
+  var users = req.body.users;
+  users.push(req.user.id);
+  
   try {
-    const groupChat = await Chat.create({
+    const groupChat = await chatDb.create({
       chatName: req.body.name,
-      users: users,
       isGroupChat: true,
-      groupAdmin: req.user,
+      users,
+      groupAdmin: req.user.id,
     });
 
-    const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
+    const fullGroupChat = await chatDb.findOne({ _id: groupChat._id })
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
 

@@ -7,7 +7,7 @@ router.post("/getChats",verifyUser, accessChat);
 router.get("/getChats",verifyUser, fetchChat);
 
 router.post("/createGroup", verifyUser, createGroupChat);
-router.post("/fetchGroups", verifyUser, fetchGroupChat);
+router.get("/fetchGroups", verifyUser, fetchGroupChat);
 router.put("/groupExit", verifyUser, groupExit);
 router.put("/addSelfToGroup   ", verifyUser, addSelfToGroup);
 

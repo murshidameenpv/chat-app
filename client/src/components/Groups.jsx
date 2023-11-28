@@ -2,7 +2,22 @@ import logo from '../images/live-chat.png'
 import { IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import { motion,AnimatePresence,} from "framer-motion"
+import { useEffect, useState } from 'react';
+import axios from 'axios'
 function Groups() {
+    const [groups,setGroups] = useState([])
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const response = await axios.get('/api/chat/fetchGroups')
+                setGroups(response.data)
+                
+            } catch (error) {
+                console.log(error);
+          }
+        }
+        fetchGroups();
+    },[])
     return (
       <AnimatePresence>
             <motion.div initial={{ opacity: 0, scale: 0 }}
@@ -18,18 +33,14 @@ function Groups() {
               <input type="text" placeholder='Search' className='border-none outline-none text-lg flex-grow ml-3 dark:bg-slate-500'/>
           </div>
           <div className='p-3 m-4 rounded-2xl flex flex-col space-y-4 overflow-y-auto no-scrollbar'>
-              <motion.div whileHover={{scale:1.02}} whileTap={{scale:1}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none'>
-                  <div className='bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center'>
-                      <p>T</p>
-                  </div>
-                  <p>Tim Cook</p>
-              </motion.div>
-              <motion.div whileHover={{scale:1.02}} whileTap={{scale:1}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none'>
-                  <div className='bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center'>
-                      <p>B</p>
-                  </div>
-                  <p>Bjong</p>
-              </motion.div>
+             {groups.map((group, index) => (
+            <motion.div key={index} whileHover={{scale:1.02}} whileTap={{scale:1}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none'>
+              <div className='bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center'>
+                <p>{group.chatName[0].toUpperCase()}</p>
+              </div>
+              <p>{group.chatName}</p>
+            </motion.div>
+          ))}
           </div>
       </motion.div>
       </AnimatePresence>
