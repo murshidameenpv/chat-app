@@ -23,9 +23,12 @@ function ChatArea() {
     
   const sendMessage = async () => {
     try {
-        await axios.post('/api/message/send', {
+      await axios.post('/api/message/send', {
         content: messageContent,
-        chatId: chat_id,})
+        chatId: chat_id,
+      });
+    setMessageContent("");
+    setRefresh(!refresh);
     } catch (error) {
       console.log(error);
     }
@@ -120,7 +123,6 @@ function ChatArea() {
     //The ESLint warning you’re seeing is because the map function expects a return value for every iteration. In your current code, there might be cases where nothing is returned. To fix this, you can return null when you don’t want to render anything
     return null;
   })}
-
           </div>
           <div className='p-1 m-3 rounded-xl bg-white flex justify-between shadow-lg'>
               <div className='flex items-center mx-2 w-full'>
@@ -132,7 +134,8 @@ function ChatArea() {
                        setRefresh(!refresh);}}}/>
                  <IconButton>
                   <SendIcon onClick={() => {
-                       sendMessage();
+                      sendMessage();
+                      setMessageContent("");
                      setRefresh(!refresh);
             }}/>
                   </IconButton>
