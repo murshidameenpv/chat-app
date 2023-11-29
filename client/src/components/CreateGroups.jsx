@@ -11,7 +11,6 @@ import { refreshSidebarFun } from '../redux/refreshSideBarSlice.js';
 
   function CreateGroups() {
     const currentTheme = useSelector((state) => state.themeKey);
-    const refreshSideBar = useSelector((state)=>state.sideBarKey)
     const [groupName, setGroupName] = useState("");
     const [open, setOpen] =useState(false);
     const navigate = useNavigate()
@@ -26,7 +25,6 @@ import { refreshSidebarFun } from '../redux/refreshSideBarSlice.js';
       try {
         await axios.post('/api/chat/createGroup', {
           name: groupName,
-          users: ["647d94aea97e40a17278c7e5","647d999e4c3dd7ca9a2e6543"],
         });
         navigate('/app/groups')
         dispatch(refreshSidebarFun())

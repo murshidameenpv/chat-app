@@ -62,7 +62,8 @@ useEffect(() => {
         </div>
         <div className='p-3 m-4 rounded-2xl flex flex-col space-y-4 overflow-y-auto no-scrollbar'>
           {users.map((user, index) => (
-            <motion.div key={index} whileHover={{scale:1.02}} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200  dark:hover:bg-gray-700 select-none' onClick={() => handleAccessChat(user._id)}>
+            <motion.div key={index} whileHover={{ scale: 1.02 }} className='flex items-center bg-white space-x-4 p-2 rounded-xl shadow-xl hover:bg-gray-200 
+             dark:hover:bg-gray-700 select-none' onClick={() => handleAccessChat(user._id)}>
               <div className='bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center'>
                 <p>{user.name[0].toUpperCase()}</p>
               </div>

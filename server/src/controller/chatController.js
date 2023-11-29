@@ -3,7 +3,6 @@ import chatDb from "../models/chatSchema.js";
 // CREATE ONE TO ONE CHAT
 export const accessChat = async (req, res) => {
   const { userId } = req.body;
-
   // Check if userId is provided
   if (!userId) {
     console.error("User id param is not send with request");
@@ -68,17 +67,14 @@ export const fetchGroupChat = async (req, res) => {
 
 
 export const createGroupChat = async (req, res) => {
-  if (!req.body.users || !req.body.name) {
+  if (!req.body.name) {
     return res.status(400).json({ message: "Data is insufficient" });
   }
-  var users = req.body.users;
-  users.push(req.user.id);
-  
   try {
     const groupChat = await chatDb.create({
       chatName: req.body.name,
       isGroupChat: true,
-      users,
+      users: [req.user.id],  // add the current user's ID to the users array
       groupAdmin: req.user.id,
     });
 
@@ -92,6 +88,7 @@ export const createGroupChat = async (req, res) => {
     throw new Error(error.message);
   }
 };
+
 
 export const addSelfToGroup = async (req, res) => {
     const { chatId, userId } = req.body;
