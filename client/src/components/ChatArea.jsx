@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from 'react'
+import React, { useEffect, useState,useContext, useRef } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton } from '@mui/material';
@@ -10,43 +10,82 @@ import { useSelector } from 'react-redux'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import {RefreshContext} from '../contexts/refreshContext.js'
-
+import { io } from "socket.io-client";
+var socket 
 function ChatArea() {
   const { currentUser } = useSelector((state) => state.userKey);
-    const [messageContent, setMessageContent] = useState("");
-    const [loaded, setLoaded] = useState(false);
-    const { id } = useParams();
-    const [chat_id, chat_user] = id.split("&");
+  const [messageContent, setMessageContent] = useState("");
+  const [loaded, setLoaded] = useState(false);
+  const { id } = useParams();
+  const [chat_id,chat_user] = id.split("&");
   const [allMessages, setAllMessages] = useState([]);
   const [allMessagesCopy, setAllMessagesCopy] = useState([]);
-    const { refresh, setRefresh } = useContext(RefreshContext);
-    
-  const sendMessage = async () => {
+  const { refresh, setRefresh } = useContext(RefreshContext);
+  const [socketConnectionStatus,setSocketConnectionStatus] = useState(false)
+  const END_POINT = 'http://localhost:8080';
+  const chatEndRef = useRef(null);  
+//connection
+  useEffect(() => {
+  socket = io(END_POINT);
+  socket.emit('setup', currentUser);
+  socket.on('connection', () => {
+    setSocketConnectionStatus(!socketConnectionStatus);
+  });
+  }, []);
+
+useEffect(() => {
+  const fetchMessages = async () => {
     try {
-      await axios.post('/api/message/send', {
-        content: messageContent,
-        chatId: chat_id,
-      });
-    setMessageContent("");
-    setRefresh(!refresh);
+      const response = await axios.get('/api/message/' + chat_id);
+      setAllMessages(response.data);
+      setLoaded(true);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+  fetchMessages();
+  setAllMessagesCopy(allMessages)
+}, [allMessagesCopy,refresh,chat_id]);
+
+// Socket.IO event listener
+// New message received
+useEffect(() => {
+  socket.on("message received", (newMessage) => {
+    console.log(newMessage,'THIS IS NEW MESSAGE');
+    if (!allMessagesCopy || allMessagesCopy._id !== newMessage._id) {
+      
+    } else {
+      setAllMessages([...allMessages],newMessage)
+    }
+  });
+}, [allMessages]);
+
   useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-              const response = await axios.get('/api/message/' + chat_id)
-              setLoaded(true)
-              setAllMessages(response.data)
-              setAllMessagesCopy(response.data)
-                console.log(response.data);
-            } catch (error) {
-                console.log(error);
-            }
+  chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [allMessages,allMessagesCopy]);
+  //new message received
+  useEffect(() => {
+    socket.on("message received", (newMessage) => {
+      console.log(newMessage,"THIS IS NEWS MESSAGE");
+      if (!allMessagesCopy || allMessagesCopy._id !== newMessage._id) {
+        // setAllMessages([...allMessages], newMessage)
+      } else {
+        setAllMessages([...allMessages], newMessage)
       }
-      fetchMessages();
-    },[ chat_id, refresh])
+    });
+  }); 
+  
+  const sendMessage = async () => {
+  try {
+    const response = await axios.post('/api/message/send', {
+      content: messageContent,
+      chatId: chat_id,
+    });
+    socket.emit("new message",response.data)
+  } catch (error) {
+    console.log(error);
+  }
+}
     if (!loaded) {
         return (
           <div
@@ -78,7 +117,7 @@ function ChatArea() {
           height={60}
         />
       </div>
-    );
+    );  
     } else {
         return (
       <AnimatePresence>
@@ -100,18 +139,18 @@ function ChatArea() {
                   </IconButton>
               </div>
          </div>
-              <div className='flex-1 overflow-y-auto no-scrollbar'>
+  <div className='flex-1 overflow-y-auto no-scrollbar'>
   {allMessages
-  .slice(0)
-  .map((message, index) => {
+  // eslint-disable-next-line array-callback-return
+  .slice(0).map((message, index) => {
     const sender = message.sender;   
-    const self_id =currentUser._id ;
+    const self_id = currentUser._id;
     if (sender._id === self_id) {
       // Message sent by the current user
       return <MessageSelf message={message} key={index} />;
     } else {
       // Message sent by someone else
-      if (allMessagesCopy && allMessagesCopy.isGroupChat) {
+      if (allMessages && allMessages.isGroupChat) {
         // In a group chat, show all messages from other users
         return <MessageOthers message={message} key={index} senderName={sender.name} />;
       } else if (sender._id !== self_id) {
@@ -119,19 +158,20 @@ function ChatArea() {
         return <MessageOthers message={message} key={index} senderName={sender.name} />;
       }
     }
-    // Return null if none of the above conditions are met
-    //The ESLint warning you’re seeing is because the map function expects a return value for every iteration. In your current code, there might be cases where nothing is returned. To fix this, you can return null when you don’t want to render anything
-    return null;
   })}
+           <div ref={chatEndRef} />
           </div>
           <div className='p-1 m-3 rounded-xl bg-white flex justify-between shadow-lg'>
               <div className='flex items-center mx-2 w-full'>
                   <input type="text" placeholder='Type here...' className='border-none outline-none text-lg flex-grow m-3'
                     value={messageContent} onChange={(e) => { setMessageContent(e.target.value); }}
-                     onKeyDown={(event) => {if (event.code === "Enter") {
-                         sendMessage();
+                    onKeyDown={(event) => {
+                      if (event.code === "Enter")
+                      {
+                        sendMessage();
                        setMessageContent("");
-                       setRefresh(!refresh);}}}/>
+                       setRefresh(!refresh);
+                       }}}/>
                  <IconButton>
                   <SendIcon onClick={() => {
                       sendMessage();

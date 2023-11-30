@@ -37,7 +37,7 @@ export default function Sidebar() {
       <div className={`border flex flex-col flex-3  rounded-tl-3xl rounded-bl-3xl ${currentTheme ? 'dark' : ''}`}>
           <div className='p-1 m-4 rounded-2xl bg-slate-50 dark:bg-slate-500 flex justify-between shadow-lg'>
               <div>
-              <IconButton>
+              <IconButton onClick={()=>{navigate('welcome')}}>
               <AccountCircleIcon/>
               </IconButton>   
               </div>
